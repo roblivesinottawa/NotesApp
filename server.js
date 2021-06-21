@@ -1,13 +1,22 @@
-const express = require('express')
+const express = require("express");
+const dbConfig = require("./config/db.config");
+const mongoose = require("mongoose");
 
-const app = express()
+mongoose
+  .connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log(`Successfully connected to the database...`))
+  .catch((err) => {
+    console.log(`Could not connect to the databse. Exiting now..., ${err}`);
+    process.exit();
+  });
 
-app.use(express.urlencoded({ extended: true }))
+const app = express();
 
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => res.json({"message": "Welcome to Notes App"}))
+app.use(express.json());
 
-const port = process.env.PORT || 7000
-app.listen(port, () => console.log(`app listening at localhost:${port}`))
- 
+app.get("/", (req, res) => res.json({ message: "Welcome to Notes App" }));
+
+const port = process.env.PORT || 7000;
+app.listen(port, () => console.log(`app listening at localhost:${port}`));
